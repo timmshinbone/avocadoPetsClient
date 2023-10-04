@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Card } from 'react-bootstrap'
-// import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
 // api function call from our api file
 import { getAllPets } from '../../api/pet'
@@ -58,7 +58,11 @@ const PetsIndex = (props) => {
         <Card key={ pet.id } style={{ width: '30%', margin: 5 }}>
             <Card.Header>{ pet.fullTitle }</Card.Header>
             <Card.Body>
-                <Card.Text>{ pet.name }</Card.Text>
+                <Card.Text>
+                    <Link to={`/pets/${pet.id}`} className='btn btn-info'>
+                        View { pet.name }
+                    </Link>
+                </Card.Text>
             </Card.Body>
         </Card>
     ))

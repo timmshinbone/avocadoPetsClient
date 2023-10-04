@@ -6,7 +6,7 @@ const Home = (props) => {
 	// console.log('props in home', props)
 
 	return (
-		<Container>
+		<Container className='m-2' style={{ textAlign: 'center' }}>
 			<h2>See All The Pets</h2>
 			<PetsIndex msgAlert={msgAlert} />
 		</Container>
