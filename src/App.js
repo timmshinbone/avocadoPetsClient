@@ -13,6 +13,7 @@ import SignIn from './components/auth/SignIn'
 import SignOut from './components/auth/SignOut'
 import ChangePassword from './components/auth/ChangePassword'
 import PetShow from './components/pets/PetShow'
+import PetCreate from './components/pets/PetCreate'
 
 const App = () => {
 
@@ -71,6 +72,14 @@ const App = () => {
 					<RequireAuth user={user}>
 						<ChangePassword msgAlert={msgAlert} user={user} />
 					</RequireAuth>}
+				/>
+				<Route 
+					path='/create-pet'
+					element={
+						<RequireAuth user={user}>
+							<PetCreate user={user} msgAlert={msgAlert} />
+						</RequireAuth>
+					}
 				/>
 				<Route 
 					path='pets/:id'

@@ -12,5 +12,15 @@ export const getOnePet = (id) => {
 }
 
 // CREATE -> Add Pet
+export const createPet = (user, newPet) => {
+    return axios({
+        url: `${apiUrl}/pets`,
+        method: 'POST',
+        headers: {
+            Authorization: `Token token=${user.token}`
+        },
+        data: { pet: newPet }
+    })
+}
 // UPDATE -> Change Pet
 // DELETE -> Set a pet free
