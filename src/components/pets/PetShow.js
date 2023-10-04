@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
+import LoadingScreen from '../shared/LoadingScreen'
 
 import { Container, Card } from 'react-bootstrap'
 
@@ -35,7 +36,7 @@ const PetShow = (props) => {
     }, [])
 
     if(!pet) {
-        return <p>Loading...</p>
+        return <LoadingScreen />
     }
 
     return (
@@ -45,11 +46,11 @@ const PetShow = (props) => {
                     <Card.Header>{ pet.fullTitle }</Card.Header>
                     <Card.Body>
                         <Card.Text>
-                            <div><small>Age: {pet.age}</small></div>
-                            <div><small>Type: {pet.type}</small></div>
-                            <div><small>
+                            <small>Age: {pet.age}</small><br/>
+                            <small>Type: {pet.type}</small><br/>
+                            <small>
                                 Adoptable: {pet.adoptable ? 'yes' : 'no'}
-                            </small></div>
+                            </small><br/>
                         </Card.Text>
                     </Card.Body>
                 </Card>

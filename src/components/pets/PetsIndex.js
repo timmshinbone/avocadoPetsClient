@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Card } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
+import LoadingScreen from '../shared/LoadingScreen'
 
 // api function call from our api file
 import { getAllPets } from '../../api/pet'
@@ -42,12 +43,12 @@ const PetsIndex = (props) => {
     // we need to account for multiple potential states of our data
     // if we have an error
     if (error) {
-        return <p>Error!</p>
+        return <LoadingScreen />
     }
 
     // if the pets aren't even loaded yet
     if (!pets) {
-        return <p>Loading....</p>
+        return <LoadingScreen />
     // if we have NO pets
     } else if (pets.length === 0) {
         return <p>No pets yet, go add some!</p>
