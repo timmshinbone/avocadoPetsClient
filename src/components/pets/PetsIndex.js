@@ -64,6 +64,9 @@ const PetsIndex = (props) => {
                         View { pet.name }
                     </Link>
                 </Card.Text>
+                { pet.owner ? 
+                    <Card.Footer>owner: {pet.owner.email}</Card.Footer>
+                : null }
             </Card.Body>
         </Card>
     ))

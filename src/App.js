@@ -25,19 +25,19 @@ const App = () => {
 	useEffect(() => {
 		// access localStorage
 		const loggedInUser = localStorage.getItem('user')
-		console.log('the loggedInUser', loggedInUser)
+		// console.log('the loggedInUser', loggedInUser)
 
 		if (loggedInUser) {
 			// we need to parse our JSON string
 			const foundUser = JSON.parse(loggedInUser)
-			console.log('foundUser', foundUser)
+			// console.log('foundUser', foundUser)
 			// then set the user
 			setUser(foundUser)
 		}
 	}, [])
 
 	const clearUser = () => {
-		console.log('clear user ran')
+		// console.log('clear user ran')
 		setUser(null)
 		localStorage.removeItem('user')
 	}

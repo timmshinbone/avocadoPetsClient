@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import LoadingScreen from '../shared/LoadingScreen'
 
-import { Container, Card } from 'react-bootstrap'
+import { Container, Card, Button } from 'react-bootstrap'
 
 // we'll need to import an api function to grab an individual pet
 import { getOnePet } from '../../api/pet'
@@ -53,6 +53,22 @@ const PetShow = (props) => {
                             </small><br/>
                         </Card.Text>
                     </Card.Body>
+                    <Card.Footer>
+                        {
+                            pet.owner && user && pet.owner._id === user._id
+                            ?
+                            <>
+                                <Button className="m-2" variant="warning">
+                                    Edit
+                                </Button>
+                                <Button className="m-2" variant="danger">
+                                    Delete
+                                </Button>
+                            </>
+                            :
+                            null
+                        }
+                    </Card.Footer>
                 </Card>
             </Container>
         </>
