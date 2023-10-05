@@ -16,6 +16,12 @@ const messages = {
 	updatePetFailure: 'Oh no! Something went wrong, please try again',
 	removePetSuccess: 'Great! Pet has been set free!',
 	removePetFailure: 'Oh no! Something went wrong, please try again',
+	createToySuccess: 'Great! Pet loves the new toy!',
+	createToyFailure: 'Oh no! Something went wrong, please try again',
+	updateToySuccess: 'Great! Toy has been updated!',
+	updateToyFailure: 'Oh no! Something went wrong, please try again',
+	removeToySuccess: 'Great! That toy is gone!',
+	removeToyFailure: 'Oh no! Something went wrong, please try again',
 }
 
 module.exports = messages

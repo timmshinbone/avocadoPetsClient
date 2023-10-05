@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import LoadingScreen from '../shared/LoadingScreen'
 import EditPetModal from './EditPetModal'
+import NewToyModal from '../toys/NewToyModal'
 import ToyShow from '../toys/ToyShow'
 import { useNavigate } from 'react-router-dom'
 
@@ -25,6 +26,7 @@ const toyCardContainerLayout = {
 const PetShow = (props) => {
     const [pet, setPet] = useState(null)
     const [editModalShow, setEditModalShow] = useState(false)
+    const [toyModalShow, setToyModalShow] = useState(false)
     // this is a boolean that we can alter to trigger a page re-render
     const [updated, setUpdated] = useState(false)
 
@@ -88,6 +90,10 @@ const PetShow = (props) => {
                 <ToyShow 
                     key={toy.id}
                     toy={toy}
+                    msgAlert={msgAlert}
+                    triggerRefresh={() => setUpdated(prev => !prev)}
+                    user={user}
+                    pet={pet}
                 />
             ))
         } else {
@@ -114,6 +120,11 @@ const PetShow = (props) => {
                         </Card.Text>
                     </Card.Body>
                     <Card.Footer>
+                        <Button className="m-2" variant="info"
+                            onClick={() => setToyModalShow(true)}
+                        >
+                            Give {pet.name} a toy!
+                        </Button>
                         {
                             pet.owner && user && pet.owner._id === user._id
                             ?
@@ -148,6 +159,13 @@ const PetShow = (props) => {
                 handleClose={() => setEditModalShow(false)}
                 triggerRefresh={() => setUpdated(prev => !prev)}
                 pet={pet}
+            />
+            <NewToyModal 
+                pet={pet}
+                show={toyModalShow}
+                msgAlert={msgAlert}
+                handleClose={() => setToyModalShow(false)}
+                triggerRefresh={() => setUpdated(prev => !prev)}
             />
         </>
     )
