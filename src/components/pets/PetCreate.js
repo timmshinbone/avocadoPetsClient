@@ -9,9 +9,15 @@ import { createPet } from '../../api/pet'
 import { createPetSuccess, createPetFailure } from '../shared/AutoDismissAlert/messages'
 import PetForm from '../shared/PetForm'
 
+// to redirect to a different component(page) we can use a hook from react-router
+import { useNavigate } from 'react-router-dom'
+
 const PetCreate = (props) => {
     // pull out our props for easy reference
     const { user, msgAlert } = props
+
+    // to utilize the navigate hook from react-router-dom
+    const navigate = useNavigate()
 
     const [pet, setPet] = useState({
         name: '',
@@ -21,6 +27,7 @@ const PetCreate = (props) => {
     })
 
     const onChange = (e) => {
+        // e is the placeholder for event
         e.persist()
 
         setPet(prevPet => {
@@ -41,20 +48,50 @@ const PetCreate = (props) => {
             } else if (updatedName === 'adoptable' && !e.target.checked) {
                 updatedValue = false
             }
-
+            
+            // build the pet object, grab the attribute name from the field and assign it the respective value.
             const updatedPet = { [updatedName] : updatedValue }
 
+            // keep all the old pet stuff and add the new pet stuff(each keypress)
             return {
                 ...prevPet, ...updatedPet
             }
         })
     }
 
+    const onSubmit = (e) => {
+        // we're still using a form - the default behavior of a form is to refresh the page
+        e.preventDefault()
+
+        // we're making an api call here
+        // so we want to handle the promise with then and catch
+        // first we want to send our create request
+        createPet(user, pet)
+            // then navigate the user to the show page if successful
+            .then(res => { navigate(`/pets/${res.data.pet.id}`)})
+            // send a success message
+            .then(() => {
+                msgAlert({
+                    heading: 'Oh Yeah!',
+                    message: createPetSuccess,
+                    variant: 'success'
+                })
+            })
+            // if it fails, keep the user on the create page and send a message
+            .catch(() => {
+                msgAlert({
+                    heading: 'Oh no!',
+                    message: createPetFailure,
+                    variant: 'danger'
+                })
+            })
+    }
+
     return (
         <PetForm 
             pet={pet} 
             handleChange={onChange}
-            handleSubmit={null}
+            handleSubmit={onSubmit}
             heading="Add a new pet!"
         />
     )
