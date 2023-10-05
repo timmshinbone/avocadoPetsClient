@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import LoadingScreen from '../shared/LoadingScreen'
 import EditPetModal from './EditPetModal'
+import ToyShow from '../toys/ToyShow'
 import { useNavigate } from 'react-router-dom'
 
 import { Container, Card, Button } from 'react-bootstrap'
@@ -14,6 +15,12 @@ import { showPetsFailure, showPetsSuccess, removePetSuccess, removePetFailure } 
 // we're going to use route parameters to get the id of the pet we're trying to retrieve from the server.
 // then we use that id with our api call function
 // when we finally retrieve the pet, render the details on the screen
+
+const toyCardContainerLayout = {
+    display: 'flex',
+    justifyContent: 'center',
+    flexFlow: 'row wrap'
+}
 
 const PetShow = (props) => {
     const [pet, setPet] = useState(null)
@@ -61,7 +68,7 @@ const PetShow = (props) => {
                     message: removePetSuccess,
                     variant: 'success',
                 })
-        )
+            )
             // navigate the user to the home page(index)
             .then(() => navigate('/'))
             // send a fail message if there is an error
@@ -72,6 +79,20 @@ const PetShow = (props) => {
                     variant: 'danger',
                 })
             )
+    }
+
+    let toyCards
+    if (pet) {
+        if (pet.toys.length > 0) {
+            toyCards = pet.toys.map(toy => (
+                <ToyShow 
+                    key={toy.id}
+                    toy={toy}
+                />
+            ))
+        } else {
+            toyCards = <p>Pet has no toys, ain't that sad?</p>
+        }
     }
 
     if(!pet) {
@@ -115,6 +136,9 @@ const PetShow = (props) => {
                         }
                     </Card.Footer>
                 </Card>
+            </Container>
+            <Container className='m-2' style={toyCardContainerLayout}>
+                {toyCards}
             </Container>
             <EditPetModal 
                 user={user}
