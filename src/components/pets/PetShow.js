@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import LoadingScreen from '../shared/LoadingScreen'
+import EditPetModal from './EditPetModal'
 
 import { Container, Card, Button } from 'react-bootstrap'
 
 // we'll need to import an api function to grab an individual pet
-import { getOnePet } from '../../api/pet'
+import { getOnePet, updatePet } from '../../api/pet'
 
 import messages from '../shared/AutoDismissAlert/messages'
 
@@ -15,6 +16,9 @@ import messages from '../shared/AutoDismissAlert/messages'
 
 const PetShow = (props) => {
     const [pet, setPet] = useState(null)
+    const [editModalShow, setEditModalShow] = useState(false)
+    // this is a boolean that we can alter to trigger a page re-render
+    const [updated, setUpdated] = useState(false)
 
     // we need to pull the id from the url
     // localhost:3000/pets/<pet_id>
@@ -58,7 +62,10 @@ const PetShow = (props) => {
                             pet.owner && user && pet.owner._id === user._id
                             ?
                             <>
-                                <Button className="m-2" variant="warning">
+                                <Button 
+                                    className="m-2" variant="warning"
+                                    onClick={() => setEditModalShow(true)}
+                                >
                                     Edit
                                 </Button>
                                 <Button className="m-2" variant="danger">
@@ -71,6 +78,15 @@ const PetShow = (props) => {
                     </Card.Footer>
                 </Card>
             </Container>
+            <EditPetModal 
+                user={user}
+                show={editModalShow}
+                updatePet={updatePet}
+                msgAlert={msgAlert}
+                handleClose={() => setEditModalShow(false)}
+                triggerRefresh={() => setUpdated(prev => !prev)}
+                pet={pet}
+            />
         </>
     )
 }

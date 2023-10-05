@@ -23,4 +23,15 @@ export const createPet = (user, newPet) => {
     })
 }
 // UPDATE -> Change Pet
+export const updatePet = (user, updatedPet) => {
+    return axios({
+        url: `${apiUrl}/pets/${updatedPet._id}`,
+        method: 'PATCH',
+        headers: {
+            Authorization: `Token token=${user.token}`
+        },
+        data: { pet: updatedPet }
+    })
+}
+
 // DELETE -> Set a pet free
