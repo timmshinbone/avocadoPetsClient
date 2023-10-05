@@ -2,13 +2,14 @@ import { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import LoadingScreen from '../shared/LoadingScreen'
 import EditPetModal from './EditPetModal'
+import { useNavigate } from 'react-router-dom'
 
 import { Container, Card, Button } from 'react-bootstrap'
 
 // we'll need to import an api function to grab an individual pet
-import { getOnePet, updatePet } from '../../api/pet'
+import { getOnePet, updatePet, removePet } from '../../api/pet'
 
-import messages from '../shared/AutoDismissAlert/messages'
+import { showPetsFailure, showPetsSuccess, removePetSuccess, removePetFailure } from '../shared/AutoDismissAlert/messages'
 
 // we're going to use route parameters to get the id of the pet we're trying to retrieve from the server.
 // then we use that id with our api call function
@@ -20,6 +21,8 @@ const PetShow = (props) => {
     // this is a boolean that we can alter to trigger a page re-render
     const [updated, setUpdated] = useState(false)
 
+    const navigate = useNavigate()
+
     // we need to pull the id from the url
     // localhost:3000/pets/<pet_id>
     // to retrieve our id, we can use something from react-router-dom called useParams
@@ -27,17 +30,49 @@ const PetShow = (props) => {
     const { id } = useParams()
     const { user, msgAlert } = props
 
+    // useEffect takes two arguments
+    // the callback function
+    // the dependency array
+    // the dependency array determines when useEffect gets called
+    // if any piece of state inside the dependency array changes
+    // this triggers the useEffect to run the callback function again
+    // NEVER EVER EVER EVER EVER EVER EVER put a piece of state in the dependency array that gets updated by the useEffect callback function
+    // doing this causes an infinite loop
+    // react will kill your application if this happens
     useEffect(() => {
         getOnePet(id)
             .then(res => setPet(res.data.pet))
             .catch(err => {
                 msgAlert({
                     heading: 'Error getting pet',
-                    message: messages.showPetsFailure,
+                    message: showPetsFailure,
                     variant: 'danger'
                 })
             })
-    }, [])
+    }, [updated])
+
+    const setPetFree = () => {
+        // we want to remove the pet
+        removePet(user, pet._id)
+            // send a success message
+            .then(() =>
+                msgAlert({
+                    heading: `${pet.name} has been set free!`,
+                    message: removePetSuccess,
+                    variant: 'success',
+                })
+        )
+            // navigate the user to the home page(index)
+            .then(() => navigate('/'))
+            // send a fail message if there is an error
+            .catch(() =>
+                msgAlert({
+                    heading: 'Oh no!',
+                    message: removePetFailure,
+                    variant: 'danger',
+                })
+            )
+    }
 
     if(!pet) {
         return <LoadingScreen />
@@ -68,7 +103,10 @@ const PetShow = (props) => {
                                 >
                                     Edit
                                 </Button>
-                                <Button className="m-2" variant="danger">
+                                <Button 
+                                    className="m-2" variant="danger"
+                                    onClick={() => setPetFree()}
+                                >
                                     Delete
                                 </Button>
                             </>
